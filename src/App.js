@@ -52,8 +52,7 @@ function App() {
   }
 
   const fetchPlane = () => {
-    // Assume we're fetching the data for the first plane only for demonstration
-    // You'll need to adjust this depending on how you plan to fetch data for multiple planes
+   
     const planeRegistration = RandomPlanes[0].Registration;
 
     const url = `https://api.planespotters.net/pub/photos/reg/${planeRegistration}`;
@@ -65,7 +64,15 @@ function App() {
         }
         return response.json();   // This returns a promise
       })
-      .then(data => console.log(data)) // Process the data in the promise
+      .then(data => {
+        if (data.photos && data.photos.length === 0) {
+          console.log('Empty object returned');
+        return false;
+        }
+        console.log(data);
+        console.log(data.photos[0].thumbnail_large.src);
+        return data.photos[0].thumbnail_large.src
+      })
       .catch(error => console.log('There was an error!', error));
   }
 
