@@ -6,27 +6,33 @@ const NUM_PLANES = 1
 
 
 
-function getRandomElements(arr, n) {
-  let result = new Set();
-  let registrations = new Set();
-  let callsignPrefixes = new Set();
+const fetchPlane = (registration) => {
+   
+  const planeRegistration = registration;
 
-  while(result.size < n && arr.length > result.size) {
-    const randomIndex = Math.floor(Math.random() * arr.length);
-    const candidate = arr[randomIndex];
+  const url = `https://api.planespotters.net/pub/photos/reg/${planeRegistration}`;
 
-    const registration = candidate.Registration;
-    const callsignPrefix = candidate.Callsign.slice(0, 2);
-
-    if (!registrations.has(registration) && !callsignPrefixes.has(callsignPrefix)) {
-      registrations.add(registration);
-      callsignPrefixes.add(callsignPrefix);
-      result.add(candidate);
-    }
-  }
-
-  return [...result];
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();   // This returns a promise
+    })
+    .then(data => {
+      if (data.photos && data.photos.length === 0) {
+        console.log('Empty object returned');
+      return false;
+      }
+      console.log(data);
+      console.log(data.photos[0].thumbnail_large.src);
+      return data.photos[0].thumbnail_large.src
+    })
+    .catch(error => console.log('There was an error!', error));
 }
+
+
+
 
 
 function App() {
@@ -51,30 +57,33 @@ function App() {
     return <div>Loading...</div>;
   }
 
-  const fetchPlane = () => {
-   
-    const planeRegistration = RandomPlanes[0].Registration;
 
-    const url = `https://api.planespotters.net/pub/photos/reg/${planeRegistration}`;
+  function getRandomElements(arr, n) {
+    let result = new Set();
+    let registrations = new Set();
+    let callsignPrefixes = new Set();
+  
+    while(result.size < n && arr.length > result.size) {
+      const randomIndex = Math.floor(Math.random() * arr.length);
+      const candidate = arr[randomIndex];
+  
+      const registration = candidate.Registration;
+      const callsignPrefix = candidate.Callsign.slice(0, 2);
+  
+      if (!registrations.has(registration) && !callsignPrefixes.has(callsignPrefix)) {
+        registrations.add(registration);
+        callsignPrefixes.add(callsignPrefix);
 
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();   // This returns a promise
-      })
-      .then(data => {
-        if (data.photos && data.photos.length === 0) {
-          console.log('Empty object returned');
-        return false;
-        }
-        console.log(data);
-        console.log(data.photos[0].thumbnail_large.src);
-        return data.photos[0].thumbnail_large.src
-      })
-      .catch(error => console.log('There was an error!', error));
+        // if (fetchPlane(registration)){
+        //   candidate.push(url:fetchPlane(registration))
+          result.add(candidate);
+        // }
+      }
+    }
+  
+    return [...result];
   }
+
 
   return (
     <div className="App">
