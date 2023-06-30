@@ -58,12 +58,34 @@ async function fetchPlane(registration) {
 
 
 
-export function LoadPlanes() {
+
+
+export function LoadPlanes(NUM_PLANES) {
   const [data, setData] = useState([]);
   const [randomPlanes, setRandomPlanes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const NUM_PLANES = 3
+
+  const fetchImages = async () => {
+    setIsLoading(true);
+    const validPlanes = [];
+    while (validPlanes.length < NUM_PLANES) {
+      delay(1000)
+      const [candidate] = getRandomElements(data, 1);
+      const imageUrl = await fetchPlane(candidate.Registration);
+      
+      if (imageUrl) {
+        validPlanes.push({...candidate, url: imageUrl});
+      }
+
+      if (validPlanes.length >= NUM_PLANES) {
+        break;
+      }
+    }
+    setRandomPlanes(validPlanes);
+    setIsLoading(false);
+  }
+
 
   useEffect(() => {
     Papa.parse(csvFile, {
@@ -78,29 +100,12 @@ export function LoadPlanes() {
 
   useEffect(() => {
     if (data.length > 0) {
-      const fetchImages = async () => {
-        const validPlanes = [];
-        while (validPlanes.length < NUM_PLANES) {
-          delay(1000)
-          const [candidate] = getRandomElements(data, 1);
-          const imageUrl = await fetchPlane(candidate.Registration);
-          
-          if (imageUrl) {
-            validPlanes.push({...candidate, url: imageUrl});
-          }
-    
-          if (validPlanes.length >= NUM_PLANES) {
-            break;
-          }
-        }
-        setRandomPlanes(validPlanes);
-        setIsLoading(false);
-      }
+      
 
       fetchImages();
       
     }
-  }, [data]);
+  }, [data, NUM_PLANES]);
 
  return { data, randomPlanes, isLoading };
 
