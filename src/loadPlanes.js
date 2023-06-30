@@ -81,10 +81,10 @@ export function LoadPlanes() {
       const fetchImages = async () => {
         const validPlanes = [];
         while (validPlanes.length < NUM_PLANES) {
-          
+          delay(1000)
           const [candidate] = getRandomElements(data, 1);
           const imageUrl = await fetchPlane(candidate.Registration);
-    
+          
           if (imageUrl) {
             validPlanes.push({...candidate, url: imageUrl});
           }
@@ -96,6 +96,7 @@ export function LoadPlanes() {
         setRandomPlanes(validPlanes);
         setIsLoading(false);
       }
+
       fetchImages();
       
     }
