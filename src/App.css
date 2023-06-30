@@ -1,0 +1,18 @@
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+
+}
+
+
+.container img{
+   width:420px;
+   height:280px;
+   object-fit:fill;
+}
+
+*{
+    background-color: aqua;
+}
