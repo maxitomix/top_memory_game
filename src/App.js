@@ -63,37 +63,44 @@ function App() {
   const [randomPlanes, setRandomPlanes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+
   useEffect(() => {
     Papa.parse(csvFile, {
       download: true,
       header: true,
-      complete: async function(parsedData) {
+      complete: function(parsedData) {
         setData(parsedData.data);
-        await delay(1000);
-        const validPlanes = [];
-        while (validPlanes.length < NUM_PLANES) {
-          await delay(1000);
-          const [candidate] = getRandomElements(parsedData.data, 1);
-          const imageUrl = await fetchPlane(candidate.Registration);
-
-            if (imageUrl) {
-              validPlanes.push({...candidate, url: imageUrl});
-            }
-
-            await delay(1000);
-
-            if (validPlanes.length >= NUM_PLANES) {
-              break;
-            }
-          }
         
-        setRandomPlanes(validPlanes);
-
-        setIsLoading(false);
-
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const fetchImages = async () => {
+        const validPlanes = [];
+        while (validPlanes.length < NUM_PLANES) {
+          await delay(1000);
+          const [candidate] = getRandomElements(data, 1);
+          const imageUrl = await fetchPlane(candidate.Registration);
+    
+          if (imageUrl) {
+            validPlanes.push({...candidate, url: imageUrl});
+          }
+    
+          if (validPlanes.length >= NUM_PLANES) {
+            break;
+          }
+        }
+        setRandomPlanes(validPlanes);
+        setIsLoading(false);
+      }
+      fetchImages();
+      
+    }
+  }, [data]);
+
+
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -108,7 +115,7 @@ function App() {
 
         {randomPlanes.map((plane, index) => (
           <>
-          <p key={index}>
+          <p key={plane.Callsign}>
             {JSON.stringify(plane, null, 2)}
           </p>
           <img src={plane.url} alt="" />
