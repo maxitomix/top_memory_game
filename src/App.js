@@ -25,6 +25,43 @@ function shuffleArray(array) {
 }
 
 
+function Modal({ isOpen, children, onClose }) {
+    if (!isOpen) {
+        return null;
+    }
+
+    return (
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            display: 'grid',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.3)'
+        }}>
+            <div style={{
+                padding: 20,
+                background: '#fff',
+                borderRadius: '2px',
+                display: 'inline-block',
+                minHeight: '300px',
+                margin: '1rem',
+                position: 'relative',
+                minWidth: '300px',
+                boxShadow: '0 3px 7px rgba(0,0,0,0.3)',
+                justifySelf: 'center'
+            }}>
+                {children}
+                <hr />
+                <button onClick={onClose}>Close</button>
+            </div>
+        </div>
+    )
+}
+
 
 
 function App() {
@@ -33,6 +70,9 @@ function App() {
     const [planeList, setPlaneList] = useState();
     const [viewedPlanes, setViewedPlanes] = useState([]);
     const [score, setScore] = useState(0);
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
 
     
     useEffect(() => {
@@ -44,9 +84,18 @@ function App() {
         console.log(callsign)
         let tempPlaneList = [...planeList];
         if(viewedPlanes.includes(callsign)) {
-            alert("You Lose! You have clicked this plane before");
+            alert(`You Lose! You have clicked the same plane twice. SCORE: ${score}`);
             setViewedPlanes([]); // Reset the game
-            setNumPlanes(3); // Start over with 3 planes
+            let newScore = 0;
+
+            // setModalContent("You Lose! You have clicked this plane before");
+            // setShowModal(true);
+
+            setScore(newScore);
+            let newNumPlanes = 3;
+            setNumPlanes(1); 
+            setNumPlanes(newNumPlanes); // Start over with 3 planes
+        
          
             } else {
         
@@ -58,13 +107,15 @@ function App() {
             if (tempViewedPlanes.length === tempPlaneList.length){
                 let newScore = score+1;
                 setScore(newScore);
-                let newNumPlanes = tempViewedPlanes.length + 1;
+                let newNumPlanes = tempViewedPlanes.length + 2;
                 setViewedPlanes([]); // Reset the game
-                alert("You Win this level! You have remembered all the planes");
+
+                // setModalContent("You Win! You have remembered all the planes");
+                // setShowModal(true);
+
+                alert(`You Win this level! Now try with ${newNumPlanes} planes`);
                 console.log(newNumPlanes);
                 setNumPlanes(newNumPlanes); // Increase the number of planes for the next game
-                
-            
                
             } else {
                 let newScore = score+1;
@@ -78,10 +129,12 @@ function App() {
         }
     }
 
-
+    function handleModalClose() {
+        setShowModal(false);
+    }
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div className="loading">Loading...</div>;
     }
 
 
@@ -91,6 +144,11 @@ function App() {
             <h1>Dont click on the same Plane twice!</h1> 
             <p>Score: {score}</p>
         </header>
+
+           {/* <Modal isOpen={showModal} onClose={handleModalClose}>
+                <h2>{modalContent}</h2>
+            </Modal> */}
+
             <div className="container">
                 {planeList.map((plane, index) => (
                 
@@ -102,6 +160,9 @@ function App() {
                 ))}
 
             </div>
+
+         
+
         </div>
     );
 
