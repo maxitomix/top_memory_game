@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/top_memory_game/static/css/main.8552fcb1.css",
+    "main.css": "/top_memory_game/static/css/main.de8967aa.css",
     "main.js": "/top_memory_game/static/js/main.c0ac5dcb.js",
     "static/js/787.00dd0db3.chunk.js": "/top_memory_game/static/js/787.00dd0db3.chunk.js",
     "static/media/AirlineData.csv": "/top_memory_game/static/media/AirlineData.f20a5b61fd9177414e67.csv",
     "index.html": "/top_memory_game/index.html",
-    "main.8552fcb1.css.map": "/top_memory_game/static/css/main.8552fcb1.css.map",
+    "main.de8967aa.css.map": "/top_memory_game/static/css/main.de8967aa.css.map",
     "main.c0ac5dcb.js.map": "/top_memory_game/static/js/main.c0ac5dcb.js.map",
     "787.00dd0db3.chunk.js.map": "/top_memory_game/static/js/787.00dd0db3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.8552fcb1.css",
+    "static/css/main.de8967aa.css",
     "static/js/main.c0ac5dcb.js"
   ]
 }
