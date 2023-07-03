@@ -83,8 +83,8 @@
 }
 
 @keyframes glowing {
-    0% { text-shadow: 0 0 10px #ff0000 }
+    0% { text-shadow: 0 0 10px #030303 }
     50% { text-shadow: 0 0 50px #ff0000}
-    100% { text-shadow: 0 0 10px #ff0000 }
+    100% { text-shadow: 0 0 10px #070707 }
   }
   
